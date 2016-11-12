@@ -64,7 +64,8 @@ class PreProcessor:
 #                     print '###############'                    
                     inputData.append(InputInstance(i, ts, text))
                     currInput = []
-        inputData.append(InputInstance(currInput[0], currInput[1], ' '.join(currInput[2:])))
+        if(len(currInput) >= 3):
+            inputData.append(InputInstance(currInput[0], currInput[1], ' '.join(currInput[2:])))
         
         with open(inputYFile, 'r') as f:
             labels = f.readlines()
@@ -86,9 +87,9 @@ class PreProcessor:
         return inputData
 
 if __name__ == '__main__':
-    inputXFile = "friends.srt"
-    inputYFile = "friends.emotion"
-    dumpFile = "dump2"       
+    inputXFile = "wd.srt"
+    inputYFile = "wd.emotion"
+    dumpFile = "dump3"       
     try:
         options, remainder = getopt.getopt(sys.argv[1:], 'h', ['help', 'xfile=', 'yfile=', 'dfile='])
     except getopt.GetoptError as err:
