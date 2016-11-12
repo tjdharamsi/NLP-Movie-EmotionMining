@@ -34,6 +34,25 @@ class MaxentClassifier:
             #print tokens
             annTokens.append(tokens)
             y_train.append(annData[ii].label)
+
+        #----------Removes EmotionLesss-------
+        """key=[]
+        for i in range(len(y_train)):
+            if(y_train[i]=="emotionless"):
+                key.append(i)
+        
+        AnnT=[]
+        YT=[]
+        for i in range(len(y_train)):
+            if(i not in key):
+                AnnT.append(annTokens[i])
+                YT.append(y_train[i])
+        
+        annTokens=AnnT
+        y_train=YT"""
+
+        #-----------------------
+
         #print len(annTokens)
         ccounts = defaultdict(lambda: 0)
         for atlst in annTokens:
@@ -77,6 +96,11 @@ class MaxentClassifier:
         
         X_train = sparse.coo_matrix((V,(I,J)),shape=(len(annTokens),len(vocabulary)))
         labels = defaultdict()
+        
+        
+
+        
+
         for ii in xrange(len(y_train)):
             labels[y_train[ii]] = ii    
         y = [labels[y_i] for y_i in y_train]
