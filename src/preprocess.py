@@ -64,7 +64,8 @@ class PreProcessor:
 #                     print '###############'                    
                     inputData.append(InputInstance(i, ts, text))
                     currInput = []
-        inputData.append(InputInstance(currInput[0], currInput[1], ' '.join(currInput[2:])))
+        if(len(currInput) >= 3):
+            inputData.append(InputInstance(currInput[0], currInput[1], ' '.join(currInput[2:])))
         
         with open(inputYFile, 'r') as f:
             labels = f.readlines()
