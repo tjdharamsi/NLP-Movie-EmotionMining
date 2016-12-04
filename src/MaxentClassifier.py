@@ -123,6 +123,8 @@ class MaxentClassifier:
             labels[y_train[ii]] = ii
         y = [labels[y_i] for y_i in y_train]
         
+        print set(y)
+        
         self.X_train = X_train
         self.y = np.asarray(y)
     
