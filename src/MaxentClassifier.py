@@ -12,6 +12,8 @@ from sklearn.preprocessing import normalize
 from numpy import dtype
 from nltk.util import ngrams
 import json
+from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier
 
 other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 
                        'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json' }
@@ -43,36 +45,37 @@ class MaxentClassifier:
         for ii in xrange(len(annData)):
             #atxt = json.loads(annData[ii].atext)
             tokens = []
-            #allTokens = []
+            allTokens = []
             #pos_tags = []
             for s in annData[ii].atext['sentences']:
                 tokens += [t['word'].lower() for t in s['tokens'] if t['pos'] in ('JJ', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN')]
-                #allTokens += [t['word'].lower() for t in s['tokens']]
+                allTokens += [t['word'].lower() for t in s['tokens']]
                 #pos_tags += [t['pos'] for t in s['tokens'] if t['pos'] in ('JJ', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN')]
-            #bigrams = ngrams(allTokens,2)
-            #tokens = tokens + list(bigrams)
+            bigrams = ngrams(allTokens,2)
+            tokens = tokens + list(bigrams)
             #print tokens
             annTokens.append(tokens)
             #annTokens.append(bigrams)
             y_train.append(annData[ii].label)
 
-        self.other_features
-        # remove emotionless class            
-#         key=[]
-#         for i in range(len(y_train)):
-#             if(y_train[i]=="emotionless"):
-#                 key.append(i)
-#         
-#         AnnT=[]
-#         YT=[]
-#         for i in range(len(y_train)):
-#             if(i not in key):
-#                 AnnT.append(annTokens[i])
-#                 YT.append(y_train[i])
-#         
-#         annTokens=AnnT
-#         y_train=YT
-
+        #self.other_features
+        # remove emotionless class 
+        """           
+        key=[]
+        for i in range(len(y_train)):
+            if(y_train[i]=="emotionless"):
+                key.append(i)
+         
+        AnnT=[]
+        YT=[]
+        for i in range(len(y_train)):
+            if(i not in key):
+                AnnT.append(annTokens[i])
+                YT.append(y_train[i])
+        
+        annTokens=AnnT
+        y_train=YT
+        """
         # we get the feature space below
         ccounts = defaultdict(lambda: 0)
         for atlst in annTokens:
@@ -180,14 +183,23 @@ class MaxentClassifier:
         #print(self.y)
     
     def train(self):
-#         self.clf = LogisticRegression(solver='sag', max_iter=1000, random_state=42,
-#                              multi_class='ovr')
-        self.clf = LogisticRegression(max_iter=1000, random_state=42,
-                             multi_class='ovr')
+#         
+        #self.clf = LogisticRegression(max_iter=1000, random_state=42,multi_class='ovr')
+
+        #RBF Kernel
+        #self.clf = svm.SVC( kernel="rbf",max_iter=1000, random_state=42,decision_function_shape='ovr')
+
+        #self.clf = LogisticRegression(solver='sag', max_iter=1000, random_state=42,multi_class='ovr')
+        #Linear SVC
+        self.clf = svm.LinearSVC( max_iter=1000, random_state=42,multi_class='ovr')
+
+        #RandomForest
+        #self.clf=RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=4, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
 
     def crossvalidate(self):
         scores = cross_val_score(self.clf, self.X_train, self.y, cv=5)
-        print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2)) 
+        print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+
         
     def getTopFeatures(self):
         X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
