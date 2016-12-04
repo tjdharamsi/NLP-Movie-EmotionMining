@@ -3,14 +3,17 @@ import sys, getopt
 import cPickle
 import json
 import re
+import nltk
+import itertools
+import numpy
 
 class InputInstance:
-    def __init__(self, i, ts, text):
+    def __init__(self, i, ts, text, atext=None, label=None):
         self.i = i
         self.ts = ts
         self.text = text
-        self.atext = None        
-        self.label = None
+        self.atext = atext
+        self.label = label
         
     def __str__(self):
         iidict = {}
@@ -32,7 +35,12 @@ class PreProcessor:
             #inp.atext = json.dumps(nlp.annotate(inp.text, properties={'annotators': 'tokenize, ssplit, pos, lemma, ner','outputFormat': 'json'}))
             inp.atext = nlp.annotate(inp.text, properties={'annotators': 'tokenize, ssplit, pos, lemma, ner','outputFormat': 'json'})
             #print inp.atext
-            
+        
+    # method to annotate a single sentence for quick testing
+    def annotateText(self, text):
+        nlp = StanfordCoreNLP('http://localhost:9000')
+        return nlp.annotate(text, properties={'annotators': 'tokenize,ssplit,pos','outputFormat': 'json'})
+    
     def readInput(self, inputXFile, inputYFile):
         inputData = []
         with open(inputXFile,'r') as f:
@@ -80,11 +88,49 @@ class PreProcessor:
             
         return inputData
 
+    # returns three dictionaries, 1st: wordToIndex, 2nd: labelToIndex, 3rd: frequency distribution (word to count)
+    def getDictionaries(self, annData):
+        annTokens = []
+        # each subtitle may have multiple sentences so this one is used to compute average token length per sentence
+        tokensPerSentence = []
+        # each subtitle may have multiple sentences so this one is used to compute average token length per subtitle
+        tokensPerSubtitle = []
+        y_train = []
+        for ii in xrange(len(annData)):
+            #atxt = json.loads(annData[ii].atext)
+            tokens = []
+            for s in annData[ii].atext['sentences']:
+                tokensPerSentence.append(len(s['tokens'])) 
+                tokens += [t['word'] for t in s['tokens']]
+            tokensPerSubtitle.append(len(tokens))
+            annTokens.append(tokens)
+            y_train.append(annData[ii].label)
+        tokensPerSentence = numpy.asarray(tokensPerSentence)
+        tokensPerSubtitle = numpy.asarray(tokensPerSubtitle)
+        word_freq = nltk.FreqDist(itertools.chain(*annTokens))
+        vocab = word_freq.most_common()
+        index_to_word = [x[0] for x in vocab]
+        #index_to_word.append(unknown_token)
+        word_to_index = dict([(w,i) for i,w in enumerate(index_to_word)])
+        class_freq = nltk.FreqDist(y_train)
+        classes = class_freq.most_common()
+        index_to_class = [x[0] for x in classes]
+        class_to_index = dict([(w,i) for i,w in enumerate(index_to_class)])
+        print 'average number of tokens per sentence: ', numpy.mean(tokensPerSentence)
+        print 'min number of tokens per sentence: ', numpy.min(tokensPerSentence)
+        print 'max number of tokens per sentence: ', numpy.max(tokensPerSentence)
+        print 'average number of tokens per subtitle: ', numpy.mean(tokensPerSubtitle)
+        print 'min number of tokens per subtitle: ', numpy.min(tokensPerSubtitle)
+        print 'max number of tokens per subtitle: ', numpy.max(tokensPerSubtitle)        
+        print 'vocabulary size: ', len(vocab)
+        return (word_to_index, class_to_index, vocab)
+
     def preprocess(self, inputXFile, inputYFile):
         print 'preprocessing data...'
         inputData = self.readInput(inputXFile, inputYFile)
         self.annotateAll(inputData)
-        return inputData
+        word_to_index, class_to_index, vocab = self.getDictionaries(inputData)
+        return (inputData, word_to_index, class_to_index, vocab)
 
 if __name__ == '__main__':
     inputXFile = None
@@ -113,6 +159,6 @@ if __name__ == '__main__':
     print 'inputYFile: ', inputYFile
     pp = PreProcessor()
     ainputData = pp.preprocess(inputXFile, inputYFile)
-    if dumpFile is not None:
-        with open(dumpFile, 'wb') as fp:
-            cPickle.dump(ainputData, fp)
+#     if dumpFile is not None:
+#         with open(dumpFile, 'wb') as fp:
+#             cPickle.dump(ainputData, fp)
