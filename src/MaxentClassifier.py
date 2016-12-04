@@ -5,7 +5,9 @@ from collections import defaultdict
 from scipy import sparse
 import numpy as np
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
+from sklearn.feature_selection import RFE
 #from pycorenlp import StanfordCoreNLP
 # import json
 #from collections import OrderedDict
@@ -20,6 +22,9 @@ class MaxentClassifier:
         self.X_train = None
         self.y = None
         self.clf = None
+        self.wordToIdx = None
+        self.IdxToWord = None
+        self.topFeatures = None
         
     def createFeatureVectors(self, annData):
         print 'createFeatureVectors'
@@ -33,7 +38,24 @@ class MaxentClassifier:
             #print tokens
             annTokens.append(tokens)
             y_train.append(annData[ii].label)
-        #print len(annTokens)
+
+        # remove emotionless class            
+#         key=[]
+#         for i in range(len(y_train)):
+#             if(y_train[i]=="emotionless"):
+#                 key.append(i)
+#         
+#         AnnT=[]
+#         YT=[]
+#         for i in range(len(y_train)):
+#             if(i not in key):
+#                 AnnT.append(annTokens[i])
+#                 YT.append(y_train[i])
+#         
+#         annTokens=AnnT
+#         y_train=YT
+
+        # we get the feature space below
         ccounts = defaultdict(lambda: 0)
         for atlst in annTokens:
             for at in atlst:
@@ -42,10 +64,6 @@ class MaxentClassifier:
         vlst = ccounts.keys()
         vlst.sort(key=lambda tup: tup[0])
         
-#         print 'vlst: '
-#         for v in vlst:
-#             print v
-        
         vocabulary = defaultdict()
         for ii in xrange(len(vlst)):
             #print 'vlst[ii]', vlst[ii]
@@ -53,7 +71,7 @@ class MaxentClassifier:
         
 #         for k, v in vocabulary.items():
 #             print k, v
-            
+
 #         ccounts = OrderedDict()
 #         for atlst in annTokens:
 #             for at in atlst:
@@ -61,6 +79,12 @@ class MaxentClassifier:
 #                     ccounts[at] += 1
 #                 else:
 #                     ccounts[at] = 1        
+
+        self.wordToIdx = vocabulary
+        print 'Feature space dimensionality: ', len(self.wordToIdx)
+        
+        # reverse index to obtain idx to word
+        self.IdxToWord = {v: k for k, v in self.wordToIdx.iteritems()}
         
         V = []
         I = []
@@ -77,7 +101,7 @@ class MaxentClassifier:
         X_train = sparse.coo_matrix((V,(I,J)),shape=(len(annTokens),len(vocabulary)))
         labels = defaultdict()
         for ii in xrange(len(y_train)):
-            labels[y_train[ii]] = ii    
+            labels[y_train[ii]] = ii
         y = [labels[y_i] for y_i in y_train]
         
         self.X_train = X_train
@@ -88,8 +112,15 @@ class MaxentClassifier:
                              multi_class='ovr')
     def crossvalidate(self):
         scores = cross_val_score(self.clf, self.X_train, self.y, cv=5)
-        print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))        
+        print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2)) 
         
+    def getTopFeatures(self):
+        X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
+        selector = RFE(self.clf, 50, step=1)
+        selector = selector.fit(X_train, y_train)
+        ranking_ = selector.ranking_
+        self.topFeatures = [self.IdxToWord[idx] for idx in xrange(len(ranking_)) if ranking_[idx] == 1]
+        print self.topFeatures
 
 if __name__ == '__main__':
     
@@ -100,4 +131,5 @@ if __name__ == '__main__':
     classifier = MaxentClassifier()
     classifier.createFeatureVectors(annData)
     classifier.train()
-    classifier.crossvalidate() 
+    classifier.crossvalidate()
+    classifier.getTopFeatures()
