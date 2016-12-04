@@ -14,17 +14,17 @@ k = 0
 i = 1
 
 for line in fr:
-	print i
-	print line.strip()
-
 	if k > 1:
-		fw.write(EMOTIONS[i])
-
+		if k == 2:
+			fw.write(EMOTIONS[i])
+			fw.write("\n")
 	else:
 		fw.write(line)
 
 	k += 1
+
 	if line.strip() == "":
+		fw.write("\n")
 		k = 0
 		i += 1	
 
