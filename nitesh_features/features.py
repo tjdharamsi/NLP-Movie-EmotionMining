@@ -4,6 +4,9 @@ import json
 from nltk.stem import WordNetLemmatizer
 wordnet_lemmatizer = WordNetLemmatizer()
 
+other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 
+                       'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json' }
+
 LEXICON = {}
 # Load Lexicon
 lex = open("lexicon.csv")
@@ -39,6 +42,7 @@ FEATURES = {}
 for line in f:
 	if k == 0:
 		i = line.strip().decode("utf-8")
+		#print i
 		FEATURES[i] = {"NN_percent" : 0, "VB_percent" : 0, "JJ_percent" : 0, "ADV_percent":0, "anger_prob" : 0, "disgust_prob":0, "emotionless_prob":0, "fear_prob":0, "happy_prob":0, "sad_prob":0, "surprise_prob":0, "prev1_emotion":0, "prev2_emotion" :0, "prev3_emotion":0}
 
 	elif k > 1:
@@ -118,6 +122,6 @@ for line in f:
 print found
 print not_found
 
-with open('features', 'w') as outfile:
+with open(other_features_dict['Titanic'], 'w') as outfile:
     json.dump(FEATURES, outfile)
 # print pp.pprint(FEATURES)

@@ -10,6 +10,11 @@ from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import RFE
 from sklearn.preprocessing import normalize
 from numpy import dtype
+from nltk.util import ngrams
+import json
+
+other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 
+                       'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json' }
 
 #from pycorenlp import StanfordCoreNLP
 # import json
@@ -28,21 +33,26 @@ class MaxentClassifier:
         self.wordToIdx = None
         self.IdxToWord = None
         self.topFeatures = None
+        self.other_features = None
         
-    def createFeatureVectors(self, annData):
+    def createFeatureVectors(self, annData, other_features):
         print 'createFeatureVectors'
         annTokens = []
         y_train = []
         for ii in xrange(len(annData)):
             #atxt = json.loads(annData[ii].atext)
             tokens = []
+            #allTokens = []
             #pos_tags = []
             for s in annData[ii].atext['sentences']:
                 tokens += [t['word'].lower() for t in s['tokens'] if t['pos'] in ('JJ', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN')]
+                #allTokens += [t['word'].lower() for t in s['tokens']]
                 #pos_tags += [t['pos'] for t in s['tokens'] if t['pos'] in ('JJ', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN')]
-            #tokens = tokens + pos_tags
+            #bigrams = ngrams(allTokens,2)
+            #tokens = tokens + list(bigrams)
             #print tokens
             annTokens.append(tokens)
+            #annTokens.append(bigrams)
             y_train.append(annData[ii].label)
 
         # remove emotionless class            
@@ -117,8 +127,11 @@ class MaxentClassifier:
         self.y = np.asarray(y)
     
     def train(self):
-        self.clf = LogisticRegression(solver='sag', max_iter=1000, random_state=42,
+#         self.clf = LogisticRegression(solver='sag', max_iter=1000, random_state=42,
+#                              multi_class='ovr')
+        self.clf = LogisticRegression(max_iter=1000, random_state=42,
                              multi_class='ovr')
+
     def crossvalidate(self):
         scores = cross_val_score(self.clf, self.X_train, self.y, cv=5)
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2)) 
@@ -130,6 +143,10 @@ class MaxentClassifier:
         ranking_ = selector.ranking_
         self.topFeatures = [self.IdxToWord[idx] for idx in xrange(len(ranking_)) if ranking_[idx] == 1]
         print self.topFeatures
+        
+    def readOtherFeatures(self, ofFile):
+        with open('Titanic_features.json', 'rb') as f:
+            self.other_features = json.load(f)
 
 if __name__ == '__main__':
     
@@ -138,6 +155,7 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
+    classifier.readOtherFeatures('')
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
