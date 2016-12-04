@@ -27,6 +27,15 @@ for line in lex:
 
 lexicon_keys = LEXICON.keys()
 
+EMOTIONS = {}
+i = 1
+# Read emotion file
+fh = open("Titanic.emotion")
+for line in fh:
+	line = line.strip()
+	EMOTIONS[i] = line
+	i += 1
+
 f = open("Titanic.srt")
 
 k = 0
@@ -39,10 +48,11 @@ not_found = 0
 
 FEATURES = {}
 
+i = 0
 for line in f:
 	if k == 0:
-		i = line.strip().decode("utf-8")
-		#print i
+		i += 1
+
 		FEATURES[i] = {"NN_percent" : 0, "VB_percent" : 0, "JJ_percent" : 0, "ADV_percent":0, "anger_prob" : 0, "disgust_prob":0, "emotionless_prob":0, "fear_prob":0, "happy_prob":0, "sad_prob":0, "surprise_prob":0, "prev1_emotion":0, "prev2_emotion" :0, "prev3_emotion":0}
 
 	elif k > 1:
@@ -113,6 +123,15 @@ for line in f:
 		if t > 0:
 			for emo, val in emotion.iteritems():
 				FEATURES[i][emo] = val * 1.0 / t
+
+
+		# Adding previous features
+		if i > 1:
+			FEATURES[i]["prev1_emotion"] = EMOTIONS[i-1]
+		if i > 2:
+			FEATURES[i]["prev2_emotion"] = EMOTIONS[i-2]
+		if i > 3:
+			FEATURES[i]["prev3_emotion"] = EMOTIONS[i-3]
 
 	k += 1
 	
