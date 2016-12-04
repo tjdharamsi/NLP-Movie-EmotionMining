@@ -22,6 +22,9 @@ other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json',
 #from sklearn.feature_extraction.text import CountVectorizer
 #from nltk.translate.ibm_model import Counts
 #from numpy import array
+class_dict = {'emotionless':0, 'happy':1, 'sad':2, 'surprise': 3, 'fear': 4, 'disgust': 5, 'anger': 6}
+
+
 
 class MaxentClassifier:
     
@@ -35,7 +38,7 @@ class MaxentClassifier:
         self.topFeatures = None
         self.other_features = None
         
-    def createFeatureVectors(self, annData, other_features):
+    def createFeatureVectors(self, annData):
         print 'createFeatureVectors'
         annTokens = []
         y_train = []
@@ -55,6 +58,7 @@ class MaxentClassifier:
             #annTokens.append(bigrams)
             y_train.append(annData[ii].label)
 
+        self.other_features
         # remove emotionless class            
 #         key=[]
 #         for i in range(len(y_train)):
@@ -118,15 +122,14 @@ class MaxentClassifier:
         
         X_train = sparse.coo_matrix((V,(I,J)),shape=(len(annTokens),len(vocabulary))).tocsr()
         X_train = normalize(X_train, norm='l1', axis=1)
-        labels = defaultdict()
-        for ii in xrange(len(y_train)):
-            labels[y_train[ii]] = ii
-        y = [labels[y_i] for y_i in y_train]
+
+        self.y = [class_dict[cl] for cl in y_train]
         
         print set(y)
         
         self.X_train = X_train
-        self.y = np.asarray(y)
+        #self.y = np.asarray(self.y)
+        print(self.y)
     
     def train(self):
 #         self.clf = LogisticRegression(solver='sag', max_iter=1000, random_state=42,
@@ -147,8 +150,9 @@ class MaxentClassifier:
         print self.topFeatures
         
     def readOtherFeatures(self, ofFile):
-        with open('Titanic_features.json', 'rb') as f:
+        with open(ofFile, 'rb') as f:
             self.other_features = json.load(f)
+        print(self.other_features)
 
 if __name__ == '__main__':
     
@@ -157,7 +161,7 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
-    classifier.readOtherFeatures('')
+    classifier.readOtherFeatures(other_features_dict["Titanic"])
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
