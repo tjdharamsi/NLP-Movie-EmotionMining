@@ -30,13 +30,13 @@ lexicon_keys = LEXICON.keys()
 EMOTIONS = {}
 i = 1
 # Read emotion file
-fh = open("Titanic.emotion")
+fh = open("wd.emotion")
 for line in fh:
 	line = line.strip()
 	EMOTIONS[i] = line
 	i += 1
 
-f = open("Titanic.srt")
+f = open("wd.srt")
 
 k = 0
 POS = ['NN','VB','JJ','RB']
@@ -141,6 +141,6 @@ for line in f:
 print found
 print not_found
 
-with open(other_features_dict['Titanic'], 'w') as outfile:
+with open(other_features_dict['Walking_Dead'], 'w') as outfile:
     json.dump(FEATURES, outfile)
 # print pp.pprint(FEATURES)
