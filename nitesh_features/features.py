@@ -30,6 +30,9 @@ k = 0
 POS = ['NN','VB','JJ','RB']
 pp = pprint.PrettyPrinter(indent=4)
 
+		
+found = 0
+not_found = 0
 
 FEATURES = {}
 
@@ -76,25 +79,31 @@ for line in f:
 
 		# Finding EMOTION percent
 		emotion = {"anger_prob" : 0, "disgust_prob":0, "emotionless_prob":0, "fear_prob":0, "happy_prob":0, "sad_prob":0, "surprise_prob":0}
-		
-		for word in tokens:
-			word = wordnet_lemmatizer.lemmatize(word)
-			if word in lexicon_keys:
-				values = LEXICON[word]
-				if values['Anger'] == 1:
-					emotion["anger_prob"] += 1
-				elif values['Disgust'] == 1:
-					emotion["disgust_prob"] += 1
-				elif values['Fear'] == 1:
-					emotion["fear_prob"] += 1
-				elif values['Joy'] == 1:
-					emotion["happy_prob"] += 1
-				elif values['Sadness'] == 1:
-					emotion["sad_prob"] += 1
-				elif values['Surprise'] == 1:
-					emotion["surprise_prob"] += 1
-			else:
-				emotion["emotionless_prob"] += 1
+
+		for pos in pos_tag:
+			word = pos[0]
+			tag = pos[1][0:2]
+
+			if tag in POS:
+				word = wordnet_lemmatizer.lemmatize(word)
+				if word in lexicon_keys:
+					found += 1
+					values = LEXICON[word]
+					if values['Anger'] == 1:
+						emotion["anger_prob"] += 1
+					elif values['Disgust'] == 1:
+						emotion["disgust_prob"] += 1
+					elif values['Fear'] == 1:
+						emotion["fear_prob"] += 1
+					elif values['Joy'] == 1:
+						emotion["happy_prob"] += 1
+					elif values['Sadness'] == 1:
+						emotion["sad_prob"] += 1
+					elif values['Surprise'] == 1:
+						emotion["surprise_prob"] += 1
+				else:
+					not_found += 1
+					emotion["emotionless_prob"] += 1
 
 		t = sum(emotion.values())
 		if t > 0:
@@ -105,6 +114,9 @@ for line in f:
 	
 	if line.strip() == "":
 		k = 0
+
+print found
+print not_found
 
 with open('features', 'w') as outfile:
     json.dump(FEATURES, outfile)
