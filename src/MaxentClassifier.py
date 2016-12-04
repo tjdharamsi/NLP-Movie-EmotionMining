@@ -24,8 +24,6 @@ other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json',
 #from numpy import array
 class_dict = {'emotionless':0, 'happy':1, 'sad':2, 'surprise': 3, 'fear': 4, 'disgust': 5, 'anger': 6}
 
-
-
 class MaxentClassifier:
     
     def __init__(self):
@@ -122,14 +120,64 @@ class MaxentClassifier:
         
         X_train = sparse.coo_matrix((V,(I,J)),shape=(len(annTokens),len(vocabulary))).tocsr()
         X_train = normalize(X_train, norm='l1', axis=1)
+        
+        # add other features over here
+        X_train = X_train.toarray()
+         
+        assert len(self.other_features) == X_train.shape[0]
+         
+        previous_labels = []
+        for ii in range(1, X_train.shape[0] + 1):
+            #print ii
+            #print self.other_features[str(ii)]
+            key1 = None
+            key2 = None
+            key3 = None
+             
+            if self.other_features[str(ii)]['prev1_emotion'] == 0:
+                key1 = 'emotionless'
+            else:
+                key1 = self.other_features[str(ii)]['prev1_emotion']
+ 
+            if self.other_features[str(ii)]['prev2_emotion'] == 0:
+                key2 = 'emotionless'
+            else:
+                key2 = self.other_features[str(ii)]['prev2_emotion']
+ 
+            if self.other_features[str(ii)]['prev3_emotion'] == 0:
+                key3 = 'emotionless'
+            else:
+                key3 = self.other_features[str(ii)]['prev3_emotion']
+             
+#             print class_dict[key1]
+#             print class_dict[key2]
+#             print class_dict[key3]
+            
+            prev_label1 = np.zeros(7)
+            prev_label1[class_dict[key1]] = 1
+            
+            prev_label2 = np.zeros(7)
+            prev_label2[class_dict[key2]] = 1
+
+            prev_label3 = np.zeros(7)
+            prev_label3[class_dict[key3]] = 1
+            
+            prev_label1 = np.concatenate((prev_label1,prev_label2,prev_label3))            
+            previous_labels.append(prev_label1)
+         
+        previous_labels = np.asarray(previous_labels)
+         
+        X_train = np.concatenate((X_train, previous_labels), axis=1)
+         
+        print X_train.shape
 
         self.y = [class_dict[cl] for cl in y_train]
         
-        print set(y)
+        #print set(self.y)
         
         self.X_train = X_train
         #self.y = np.asarray(self.y)
-        print(self.y)
+        #print(self.y)
     
     def train(self):
 #         self.clf = LogisticRegression(solver='sag', max_iter=1000, random_state=42,
@@ -152,7 +200,7 @@ class MaxentClassifier:
     def readOtherFeatures(self, ofFile):
         with open(ofFile, 'rb') as f:
             self.other_features = json.load(f)
-        print(self.other_features)
+        #print(self.other_features)
 
 if __name__ == '__main__':
     
@@ -161,8 +209,8 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict["Titanic"])
+    classifier.readOtherFeatures(other_features_dict['Walking_Dead'])
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
-    classifier.getTopFeatures()
+    #classifier.getTopFeatures()
