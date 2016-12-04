@@ -221,7 +221,7 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict['Walking_Dead'])
+    classifier.readOtherFeatures(other_features_dict['Titanic'])
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
