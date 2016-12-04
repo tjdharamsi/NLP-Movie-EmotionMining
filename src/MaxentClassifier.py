@@ -8,6 +8,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import RFE
+from sklearn.preprocessing import normalize
+from numpy import dtype
+
 #from pycorenlp import StanfordCoreNLP
 # import json
 #from collections import OrderedDict
@@ -33,8 +36,11 @@ class MaxentClassifier:
         for ii in xrange(len(annData)):
             #atxt = json.loads(annData[ii].atext)
             tokens = []
+            #pos_tags = []
             for s in annData[ii].atext['sentences']:
-                tokens += [(t['word'].lower(), t['pos']) for t in s['tokens'] if t['pos'] in ('JJ', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN')]
+                tokens += [t['word'].lower() for t in s['tokens'] if t['pos'] in ('JJ', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN')]
+                #pos_tags += [t['pos'] for t in s['tokens'] if t['pos'] in ('JJ', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN')]
+            #tokens = tokens + pos_tags
             #print tokens
             annTokens.append(tokens)
             y_train.append(annData[ii].label)
@@ -98,7 +104,10 @@ class MaxentClassifier:
                 I.append(ii)
                 J.append(vocabulary[key])
         
-        X_train = sparse.coo_matrix((V,(I,J)),shape=(len(annTokens),len(vocabulary)))
+        V = np.asarray(V, dtype=np.float64)
+        
+        X_train = sparse.coo_matrix((V,(I,J)),shape=(len(annTokens),len(vocabulary))).tocsr()
+        X_train = normalize(X_train, norm='l1', axis=1)
         labels = defaultdict()
         for ii in xrange(len(y_train)):
             labels[y_train[ii]] = ii
