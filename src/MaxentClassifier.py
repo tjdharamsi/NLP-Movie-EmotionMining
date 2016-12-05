@@ -25,6 +25,7 @@ other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json',
 #from nltk.translate.ibm_model import Counts
 #from numpy import array
 class_dict = {'emotionless':0, 'happy':1, 'sad':2, 'surprise': 3, 'fear': 4, 'disgust': 5, 'anger': 6}
+rev_class_dict={0:'emotionless',1:'happy',2: 'sad',3: 'surprise', 4:'fear', 5:'disgust',6: 'anger'}
 
 class MaxentClassifier:
     
@@ -184,7 +185,7 @@ class MaxentClassifier:
     
     def train(self):
 #         
-        #self.clf = LogisticRegression(max_iter=1000, random_state=42,multi_class='ovr')
+        self.clf = LogisticRegression(max_iter=1000, random_state=42,multi_class='ovr')
 
         #RBF Kernel
         #self.clf = svm.SVC( kernel="rbf",max_iter=1000, random_state=42,decision_function_shape='ovr')
@@ -194,13 +195,31 @@ class MaxentClassifier:
         #self.clf = svm.LinearSVC( max_iter=1000, random_state=42,multi_class='ovr')
 
         #RandomForest
-        self.clf=RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=4, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
+        #self.clf=RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=4, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
 
     def crossvalidate(self):
         scores = cross_val_score(self.clf, self.X_train, self.y, cv=5)
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
-        
+    def validate(self):
+        X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
+        print(self.clf.fit(X_train, y_train).score(X_test,y_test))
+        ans=self.clf.predict(X_test)
+        #print(ans)
+        y_train.extend(ans)
+        #print(y_train)
+        keerti_results=[]
+        for i in y_train:
+            keerti_results.append(rev_class_dict[i])
+        #print(keerti_results)
+        f=open('results.txt','w')
+        for i in keerti_results:
+            f.write(i+"\n")
+        f.close()
+
+
+
+
     def getTopFeatures(self):
         X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
         selector = RFE(self.clf, 50, step=1)
@@ -221,8 +240,9 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict['Titanic'])
+    classifier.readOtherFeatures(other_features_dict['Walking_Dead'])
     classifier.createFeatureVectors(annData)
     classifier.train()
-    classifier.crossvalidate()
+    #classifier.crossvalidate()
+    classifier.validate()
     #classifier.getTopFeatures()
