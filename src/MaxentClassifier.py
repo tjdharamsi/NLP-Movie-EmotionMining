@@ -14,6 +14,11 @@ from nltk.util import ngrams
 import json
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+import itertools
+
+
 
 other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 
                        'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json' }
@@ -30,7 +35,7 @@ rev_class_dict={0:'emotionless',1:'happy',2: 'sad',3: 'surprise', 4:'fear', 5:'d
 class MaxentClassifier:
     
     def __init__(self):
-        print 'init'
+        print('init')
         self.X_train = None
         self.y = None
         self.clf = None
@@ -38,9 +43,11 @@ class MaxentClassifier:
         self.IdxToWord = None
         self.topFeatures = None
         self.other_features = None
+
+
         
     def createFeatureVectors(self, annData):
-        print 'createFeatureVectors'
+        print('createFeatureVectors')
         annTokens = []
         y_train = []
         for ii in xrange(len(annData)):
@@ -103,7 +110,7 @@ class MaxentClassifier:
 #                     ccounts[at] = 1        
 
         self.wordToIdx = vocabulary
-        print 'Feature space dimensionality: ', len(self.wordToIdx)
+        print('Feature space dimensionality: ', len(self.wordToIdx))
         
         # reverse index to obtain idx to word
         self.IdxToWord = {v: k for k, v in self.wordToIdx.iteritems()}
@@ -173,7 +180,7 @@ class MaxentClassifier:
          
         X_train = np.concatenate((X_train, previous_labels), axis=1)
          
-        print X_train.shape
+        print(X_train.shape)
 
         self.y = [class_dict[cl] for cl in y_train]
         
@@ -202,7 +209,7 @@ class MaxentClassifier:
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
     def validate(self):
-        X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.1, random_state=42)
         print(self.clf.fit(X_train, y_train).score(X_test,y_test))
         ans=self.clf.predict(X_test)
         #print(ans)
@@ -218,6 +225,47 @@ class MaxentClassifier:
         f.close()
 
 
+        #Confusion Matrix
+        plt.figure()
+        cnf_matrix = confusion_matrix(y_test, ans)
+        np.set_printoptions(precision=2)
+        class_names=class_dict.keys()
+        plt.imshow(cnf_matrix, interpolation='nearest', cmap=plt.cm.Blues)
+        plt.title('Confusion matrix, without normalization')
+        plt.colorbar()
+        tick_marks = np.arange(len(class_names))
+        plt.xticks(tick_marks, class_names, rotation=45)
+        plt.yticks(tick_marks, class_names)
+        thresh = cnf_matrix.max() / 2.
+        for i, j in itertools.product(range(cnf_matrix.shape[0]), range(cnf_matrix.shape[1])):
+            plt.text(j, i, cnf_matrix[i, j],horizontalalignment="center", color="white" if cnf_matrix[i, j] > thresh else "black")
+
+        plt.tight_layout()
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
+        plt.show()
+# Plot non-normalized confusion matrix
+        """
+        plt.imshow(cnf_matrix, interpolation='nearest', cmap=plt.cm.Blues)
+        plt.title('Confusion matrix, without normalization')
+        plt.colorbar()
+        tick_marks = np.arange(len(class_names))
+        plt.xticks(tick_marks, class_names, rotation=45)
+        plt.yticks(tick_marks, class_names)
+        cnf_matrix = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
+        np.around(cnf_matrix,1)
+        thresh = cnf_matrix.max() / 2.
+        for i, j in itertools.product(range(cnf_matrix.shape[0]), range(cnf_matrix.shape[1])):
+            plt.text(j, i, cnf_matrix[i, j],horizontalalignment="center", color="white" if cnf_matrix[i, j] > thresh else "black")
+
+        plt.tight_layout()
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
+        plt.show()"""
+
+
+
+
 
 
     def getTopFeatures(self):
@@ -226,12 +274,16 @@ class MaxentClassifier:
         selector = selector.fit(X_train, y_train)
         ranking_ = selector.ranking_
         self.topFeatures = [self.IdxToWord[idx] for idx in xrange(len(ranking_)) if ranking_[idx] == 1]
-        print self.topFeatures
+        print(self.topFeatures)
         
     def readOtherFeatures(self, ofFile):
         with open(ofFile, 'rb') as f:
             self.other_features = json.load(f)
         #print(self.other_features)
+
+    
+
+
 
 if __name__ == '__main__':
     
@@ -240,7 +292,7 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict['Walking_Dead'])
+    classifier.readOtherFeatures(other_features_dict['Friends'])
     classifier.createFeatureVectors(annData)
     classifier.train()
     #classifier.crossvalidate()
