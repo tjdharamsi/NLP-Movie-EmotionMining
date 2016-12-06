@@ -3,7 +3,7 @@ from nltk.stem import WordNetLemmatizer
 
 wordnet_lemmatizer = WordNetLemmatizer()
 
-f = open("friends.srt")
+f = open("wd.srt")
 
 k = 0
 POS = ['NN','VB','JJ','RB']
@@ -38,3 +38,8 @@ for line in f:
 import operator
 sorted_x = sorted(words.items(), key=operator.itemgetter(1))
 print sorted_x
+
+f=open("w_results.txt",'w')
+for i in sorted_x:
+	f.write(str(i)+"\n")
+f.close()
