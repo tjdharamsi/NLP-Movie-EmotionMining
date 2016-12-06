@@ -258,11 +258,8 @@ class MaxentClassifier:
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
     def validate(self):
-<<<<<<< HEAD
+
         X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
-=======
-        X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=123)
->>>>>>> origin/master
         print(self.clf.fit(X_train, y_train).score(X_test,y_test))
         ans=self.clf.predict(X_test)
         #print(ans)
