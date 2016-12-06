@@ -18,6 +18,7 @@ from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import itertools
+from sklearn.metrics import classification_report
 
 other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 
                        'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json' }
@@ -59,7 +60,7 @@ class MaxentClassifier:
                 allTokens += [t['word'].lower() for t in s['tokens']]
                 #pos_tags += [t['pos'] for t in s['tokens'] if t['pos'] in ('JJ', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN')]
             bigrams = ngrams(allTokens,2)
-            tokens = tokens + list(bigrams)
+            tokens =    list(bigrams)#tokens+
             #print tokens
             annTokens.append(tokens)
             #annTokens.append(bigrams)
@@ -67,7 +68,7 @@ class MaxentClassifier:
 
         #self.other_features
         # remove emotionless class 
-        """           
+        """         
         key=[]
         for i in range(len(y_train)):
             if(y_train[i]=="emotionless"):
@@ -109,7 +110,7 @@ class MaxentClassifier:
 #                     ccounts[at] = 1        
 
         self.wordToIdx = vocabulary
-        print('Feature space dimensionality: ', len(self.wordToIdx))
+        
         
         # reverse index to obtain idx to word
         self.IdxToWord = {v: k for k, v in self.wordToIdx.iteritems()}
@@ -133,7 +134,8 @@ class MaxentClassifier:
         
         # add other features over here
         X_train = X_train.toarray()
-         
+        print(len(self.other_features))
+        print(X_train.shape[0])
         assert len(self.other_features) == X_train.shape[0]
          
         extra_features = []
@@ -178,12 +180,27 @@ class MaxentClassifier:
             # add punctuation features
             punc_features = [self.other_features[str(ii)]['eight_note_mark'], self.other_features[str(ii)]['exclamation_pt'], 
                              self.other_features[str(ii)]['question_mark']]
+
             
             # add pos tag percentages
+            POS_features=[]
+            for tag in ['NN','VB','JJ','ADV']:
+                POS_features.append(self.other_features[str(ii)][tag+"_percent"])
+
+
+
             
             
-            extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3, punc_features))
-            extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3))
+            
+            extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3, punc_features,POS_features))
+            #extra_fv = np.concatenate((prev_label2, prev_label3, POS_features,punc_features))
+            #extra_fv = np.concatenate((prev_label1))
+            #extra_fv=prev_label1
+
+
+            
+
+            
             
             extra_features.append(extra_fv)
             
@@ -193,8 +210,10 @@ class MaxentClassifier:
         
          
         X_train = np.concatenate((X_train, extra_features), axis=1)
+        #X_train=extra_features
+        print('Feature space dimensionality: ', X_train.shape[1])
          
-        print(X_train.shape)
+        #print(X_train.shape)
 
         self.y = [class_dict[cl] for cl in y_train]
         
@@ -225,7 +244,7 @@ class MaxentClassifier:
         keerti_results=[]
         for i in predicted:
             keerti_results.append(rev_class_dict[i])
-        print(keerti_results)
+        #print(keerti_results)
         f=open('results.txt','w')
         for i in keerti_results:
             f.write(i+"\n")
@@ -234,8 +253,8 @@ class MaxentClassifier:
         for i in (predicted):
             if(i==2):
                 count+=1
-        print(count)
-
+        #print(count)
+        """
         plt.figure()
         cnf_matrix = confusion_matrix(self.y, predicted)
         np.set_printoptions(precision=2)
@@ -254,8 +273,9 @@ class MaxentClassifier:
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         plt.show()
-
+        """
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+        #print(classification_report(self.y, predicted, target_names=class_names))
 
     def validate(self):
 
@@ -294,24 +314,7 @@ class MaxentClassifier:
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         plt.show()
-# Plot non-normalized confusion matrix
-        """
-        plt.imshow(cnf_matrix, interpolation='nearest', cmap=plt.cm.Blues)
-        plt.title('Confusion matrix, without normalization')
-        plt.colorbar()
-        tick_marks = np.arange(len(class_names))
-        plt.xticks(tick_marks, class_names, rotation=45)
-        plt.yticks(tick_marks, class_names)
-        cnf_matrix = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-        np.around(cnf_matrix,1)
-        thresh = cnf_matrix.max() / 2.
-        for i, j in itertools.product(range(cnf_matrix.shape[0]), range(cnf_matrix.shape[1])):
-            plt.text(j, i, cnf_matrix[i, j],horizontalalignment="center", color="white" if cnf_matrix[i, j] > thresh else "black")
 
-        plt.tight_layout()
-        plt.ylabel('True label')
-        plt.xlabel('Predicted label')
-        plt.show()"""
 
 
 
@@ -342,7 +345,7 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict['Titanic'])
+    classifier.readOtherFeatures(other_features_dict['Walking_Dead'])
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
