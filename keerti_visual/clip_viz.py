@@ -1,10 +1,17 @@
-fr = open("Titanic.srt", "r")
-fw = open("Titanic_Emotion.srt", "w")
+episode = "Titanic"
+
+original_srt_file = episode + ".srt"
+emotion_srt_file = episode + "_Emotion.srt"
+emotion_file = episode + ".emotion"
+
+fr = open(original_srt_file, "r")
+fw = open(emotion_srt_file, "w")
 
 EMOTIONS = {}
 i = 1
 # Read emotion file
-f = open("Titanic.emotion")
+f = open(emotion_file)
+
 for line in f:
 	line = line.strip()
 	EMOTIONS[i] = line
