@@ -18,8 +18,6 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import itertools
 
-
-
 other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 
                        'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json' }
 
@@ -137,10 +135,13 @@ class MaxentClassifier:
          
         assert len(self.other_features) == X_train.shape[0]
          
-        previous_labels = []
+        extra_features = []
         for ii in range(1, X_train.shape[0] + 1):
             #print ii
             #print self.other_features[str(ii)]
+            
+            # append previous labels
+            
             key1 = None
             key2 = None
             key3 = None
@@ -173,12 +174,24 @@ class MaxentClassifier:
             prev_label3 = np.zeros(7)
             prev_label3[class_dict[key3]] = 1
             
-            prev_label1 = np.concatenate((prev_label1,prev_label2,prev_label3))            
-            previous_labels.append(prev_label1)
+            # add punctuation features
+            punc_features = [self.other_features[str(ii)]['eight_note_mark'], self.other_features[str(ii)]['exclamation_pt'], 
+                             self.other_features[str(ii)]['question_mark']]
+            
+            # add pos tag percentages
+            
+            
+            extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3, punc_features))
+            extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3))
+            
+            extra_features.append(extra_fv)
+            
+        
+        extra_features = np.asarray(extra_features)
+        
+        
          
-        previous_labels = np.asarray(previous_labels)
-         
-        X_train = np.concatenate((X_train, previous_labels), axis=1)
+        X_train = np.concatenate((X_train, extra_features), axis=1)
          
         print(X_train.shape)
 
@@ -209,7 +222,7 @@ class MaxentClassifier:
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
     def validate(self):
-        X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.1, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=123)
         print(self.clf.fit(X_train, y_train).score(X_test,y_test))
         ans=self.clf.predict(X_test)
         #print(ans)
@@ -292,7 +305,7 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict['Friends'])
+    classifier.readOtherFeatures(other_features_dict['Titanic'])
     classifier.createFeatureVectors(annData)
     classifier.train()
     #classifier.crossvalidate()
