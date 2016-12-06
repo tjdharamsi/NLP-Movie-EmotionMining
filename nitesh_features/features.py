@@ -7,7 +7,7 @@ from gi.overrides.keysyms import exclam
 wordnet_lemmatizer = WordNetLemmatizer()
 
 other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 
-					   'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json' }
+					   'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json', 'combined': '../nitesh_features/combined_features.json' }
 
 eight_note = u'\u266a'
 
@@ -34,13 +34,13 @@ lexicon_keys = LEXICON.keys()
 EMOTIONS = {}
 i = 1
 # Read emotion file
-fh = open("friends.emotion")
+fh = open("combined.emotion")
 for line in fh:
 	line = line.strip()
 	EMOTIONS[i] = line
 	i += 1
 
-f = open("friends.srt")
+f = open("combined.srt")
 
 k = 0
 POS = ['NN','VB','JJ','RB']
@@ -157,6 +157,6 @@ for line in f:
 print found
 print not_found
 
-with open(other_features_dict['Friends'], 'w') as outfile:
+with open(other_features_dict['combined'], 'w') as outfile:
 	json.dump(FEATURES, outfile)
 # print pp.pprint(FEATURES)
