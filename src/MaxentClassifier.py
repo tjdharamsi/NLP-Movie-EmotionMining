@@ -7,6 +7,7 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_predict
 from sklearn.feature_selection import RFE
 from sklearn.preprocessing import normalize
 from numpy import dtype
@@ -17,8 +18,6 @@ from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import itertools
-
-
 
 other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 
                        'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json' }
@@ -137,10 +136,13 @@ class MaxentClassifier:
          
         assert len(self.other_features) == X_train.shape[0]
          
-        previous_labels = []
+        extra_features = []
         for ii in range(1, X_train.shape[0] + 1):
             #print ii
             #print self.other_features[str(ii)]
+            
+            # append previous labels
+            
             key1 = None
             key2 = None
             key3 = None
@@ -173,12 +175,24 @@ class MaxentClassifier:
             prev_label3 = np.zeros(7)
             prev_label3[class_dict[key3]] = 1
             
-            prev_label1 = np.concatenate((prev_label1,prev_label2,prev_label3))            
-            previous_labels.append(prev_label1)
+            # add punctuation features
+            punc_features = [self.other_features[str(ii)]['eight_note_mark'], self.other_features[str(ii)]['exclamation_pt'], 
+                             self.other_features[str(ii)]['question_mark']]
+            
+            # add pos tag percentages
+            
+            
+            extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3, punc_features))
+            extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3))
+            
+            extra_features.append(extra_fv)
+            
+        
+        extra_features = np.asarray(extra_features)
+        
+        
          
-        previous_labels = np.asarray(previous_labels)
-         
-        X_train = np.concatenate((X_train, previous_labels), axis=1)
+        X_train = np.concatenate((X_train, extra_features), axis=1)
          
         print(X_train.shape)
 
@@ -206,10 +220,46 @@ class MaxentClassifier:
 
     def crossvalidate(self):
         scores = cross_val_score(self.clf, self.X_train, self.y, cv=5)
+        predicted = cross_val_predict(self.clf,self.X_train,self.y, cv=5)
+        #print(predicted)
+        keerti_results=[]
+        for i in predicted:
+            keerti_results.append(rev_class_dict[i])
+        print(keerti_results)
+        f=open('results.txt','w')
+        for i in keerti_results:
+            f.write(i+"\n")
+        f.close()
+        count=0
+        for i in (predicted):
+            if(i==2):
+                count+=1
+        print(count)
+
+        plt.figure()
+        cnf_matrix = confusion_matrix(self.y, predicted)
+        np.set_printoptions(precision=2)
+        class_names=["emotionless","happy","sad","surprise","fear","disgust","anger"]
+        plt.imshow(cnf_matrix, interpolation='nearest', cmap=plt.cm.Blues)
+        plt.title('Confusion matrix, without normalization')
+        plt.colorbar()
+        tick_marks = np.arange(len(class_names))
+        plt.xticks(tick_marks, class_names, rotation=45)
+        plt.yticks(tick_marks, class_names)
+        thresh = cnf_matrix.max() / 2.
+        for i, j in itertools.product(range(cnf_matrix.shape[0]), range(cnf_matrix.shape[1])):
+            plt.text(j, i, cnf_matrix[i, j],horizontalalignment="center", color="white" if cnf_matrix[i, j] > thresh else "black")
+
+        plt.tight_layout()
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
+        plt.show()
+
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
     def validate(self):
-        X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.1, random_state=42)
+
+        X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
         print(self.clf.fit(X_train, y_train).score(X_test,y_test))
         ans=self.clf.predict(X_test)
         #print(ans)
@@ -223,13 +273,13 @@ class MaxentClassifier:
         for i in keerti_results:
             f.write(i+"\n")
         f.close()
-
+        
 
         #Confusion Matrix
         plt.figure()
         cnf_matrix = confusion_matrix(y_test, ans)
         np.set_printoptions(precision=2)
-        class_names=class_dict.keys()
+        class_names=["emotionless","happy","sad","surprise","fear","disgust","anger"]
         plt.imshow(cnf_matrix, interpolation='nearest', cmap=plt.cm.Blues)
         plt.title('Confusion matrix, without normalization')
         plt.colorbar()
@@ -292,9 +342,9 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict['Friends'])
+    classifier.readOtherFeatures(other_features_dict['Titanic'])
     classifier.createFeatureVectors(annData)
     classifier.train()
-    #classifier.crossvalidate()
-    classifier.validate()
+    classifier.crossvalidate()
+    #classifier.validate()
     #classifier.getTopFeatures()
