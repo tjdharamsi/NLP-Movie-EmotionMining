@@ -27,7 +27,7 @@ class InputInstance:
 class PreProcessor:
     
     def __init__(self):
-        print 'Initializing PreProcessor'
+        print('Initializing PreProcessor')
 
     def annotateAll(self, inputData):
         nlp = StanfordCoreNLP('http://localhost:9000')
@@ -116,17 +116,17 @@ class PreProcessor:
         classes = class_freq.most_common()
         index_to_class = [x[0] for x in classes]
         class_to_index = dict([(w,i) for i,w in enumerate(index_to_class)])
-        print 'average number of tokens per sentence: ', numpy.mean(tokensPerSentence)
-        print 'min number of tokens per sentence: ', numpy.min(tokensPerSentence)
-        print 'max number of tokens per sentence: ', numpy.max(tokensPerSentence)
-        print 'average number of tokens per subtitle: ', numpy.mean(tokensPerSubtitle)
-        print 'min number of tokens per subtitle: ', numpy.min(tokensPerSubtitle)
-        print 'max number of tokens per subtitle: ', numpy.max(tokensPerSubtitle)        
-        print 'vocabulary size: ', len(vocab)
+        print('average number of tokens per sentence: ', numpy.mean(tokensPerSentence))
+        print('min number of tokens per sentence: ', numpy.min(tokensPerSentence))
+        print('max number of tokens per sentence: ', numpy.max(tokensPerSentence))
+        print('average number of tokens per subtitle: ', numpy.mean(tokensPerSubtitle))
+        print('min number of tokens per subtitle: ', numpy.min(tokensPerSubtitle))
+        print('max number of tokens per subtitle: ', numpy.max(tokensPerSubtitle))        
+        print('vocabulary size: ', len(vocab))
         return (word_to_index, class_to_index, vocab)
 
     def preprocess(self, inputXFile, inputYFile):
-        print 'preprocessing data...'
+        print('preprocessing data...')
         inputData = self.readInput(inputXFile, inputYFile)
         self.annotateAll(inputData)
         word_to_index, class_to_index, vocab = self.getDictionaries(inputData)
@@ -140,11 +140,11 @@ if __name__ == '__main__':
         options, remainder = getopt.getopt(sys.argv[1:], 'h', ['help', 'xfile=', 'yfile=', 'dfile='])
     except getopt.GetoptError as err:
         print(err)
-        print 'preprocess.py --xfile <x_file> --yfile <yte_file> --dfile <dump_file>'
+        print('preprocess.py --xfile <x_file> --yfile <yte_file> --dfile <dump_file>')
         sys.exit(2)
     for opt, arg in options:
         if opt in ('-h', '-help'):
-            print 'preprocess.py --xfile <x_file> --yfile <yte_file> --dfile <dump_file>'
+            print('preprocess.py --xfile <x_file> --yfile <yte_file> --dfile <dump_file>')
             sys.exit()
         elif opt == '--xfile':
             inputXFile = arg
@@ -153,10 +153,10 @@ if __name__ == '__main__':
         elif opt == '--dfile':
             dumpFile = arg        
         else:
-            print 'unhandled option'
+            print('unhandled option')
     
-    print 'inputXFile: ', inputXFile
-    print 'inputYFile: ', inputYFile
+    print('inputXFile: ', inputXFile)
+    print('inputYFile: ', inputYFile)
     pp = PreProcessor()
     ainputData = pp.preprocess(inputXFile, inputYFile)
 #     if dumpFile is not None:
