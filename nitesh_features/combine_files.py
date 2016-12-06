@@ -4,7 +4,7 @@ original_srt_file = episode + ".srt"
 fr = open(original_srt_file, "r")
 fw = open("new_combined.srt", "w")
 
-i = 1
+i = 1	
 k = 0
 for line in fr:
 	if k == 0:
