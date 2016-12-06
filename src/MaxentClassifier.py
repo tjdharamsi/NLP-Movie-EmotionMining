@@ -20,7 +20,7 @@ from sklearn.metrics import confusion_matrix
 import itertools
 from sklearn.metrics import classification_report
 
-other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 
+other_features_dict = {'Titanic': '../nitesh_features/Titanic_features.json', 'combined': '../nitesh_features/combined_features.json',
                        'Friends': '../nitesh_features/Friends_features.json', 'Walking_Dead': '../nitesh_features/Walking_Dead_features.json' }
 
 #from pycorenlp import StanfordCoreNLP
@@ -60,7 +60,7 @@ class MaxentClassifier:
                 allTokens += [t['word'].lower() for t in s['tokens']]
                 #pos_tags += [t['pos'] for t in s['tokens'] if t['pos'] in ('JJ', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN')]
             bigrams = ngrams(allTokens,2)
-            tokens =    list(bigrams)#tokens+
+            tokens =    list(bigrams)+tokens
             #print tokens
             annTokens.append(tokens)
             #annTokens.append(bigrams)
@@ -192,10 +192,10 @@ class MaxentClassifier:
             
             
             
-            extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3, punc_features,POS_features))
+            #extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3, POS_features, punc_features))
             #extra_fv = np.concatenate((prev_label2, prev_label3, POS_features,punc_features))
-            #extra_fv = np.concatenate((prev_label1))
-            #extra_fv=prev_label1
+            extra_fv = np.concatenate((punc_features,POS_features,prev_label3,prev_label2,prev_label1))
+            
 
 
             
@@ -225,7 +225,7 @@ class MaxentClassifier:
     
     def train(self):
 #         
-        self.clf = LogisticRegression(max_iter=1000, random_state=42,multi_class='ovr')
+        #self.clf = LogisticRegression(max_iter=1000, random_state=42,multi_class='ovr')
 
         #RBF Kernel
         #self.clf = svm.SVC( kernel="rbf",max_iter=1000, random_state=42,decision_function_shape='ovr')
@@ -235,7 +235,7 @@ class MaxentClassifier:
         #self.clf = svm.LinearSVC( max_iter=1000, random_state=42,multi_class='ovr')
 
         #RandomForest
-        #self.clf=RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=4, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
+        self.clf=RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=4, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
 
     def crossvalidate(self):
         scores = cross_val_score(self.clf, self.X_train, self.y, cv=5)
@@ -254,7 +254,7 @@ class MaxentClassifier:
             if(i==2):
                 count+=1
         #print(count)
-        """
+        
         plt.figure()
         cnf_matrix = confusion_matrix(self.y, predicted)
         np.set_printoptions(precision=2)
@@ -273,9 +273,9 @@ class MaxentClassifier:
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         plt.show()
-        """
+        
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-        #print(classification_report(self.y, predicted, target_names=class_names))
+        print(classification_report(self.y, predicted, target_names=class_names))
 
     def validate(self):
 
@@ -345,7 +345,7 @@ if __name__ == '__main__':
         annData = cPickle.load(f)
         
     classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict['Walking_Dead'])
+    classifier.readOtherFeatures(other_features_dict['combined'])
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
