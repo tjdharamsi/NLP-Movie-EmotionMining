@@ -45,8 +45,7 @@ class MaxentClassifier:
         self.other_features = None
 
 
-        
-    def createFeatureVectors(self, annData):
+    def createFeatureVectors(self, annData, ignoreEmotionLess=False):
         print('createFeatureVectors')
         annTokens = []
         y_train = []
@@ -67,23 +66,26 @@ class MaxentClassifier:
             y_train.append(annData[ii].label)
 
         #self.other_features
-        # remove emotionless class 
-        """         
-        key=[]
-        for i in range(len(y_train)):
-            if(y_train[i]=="emotionless"):
-                key.append(i)
-         
-        AnnT=[]
-        YT=[]
-        for i in range(len(y_train)):
-            if(i not in key):
-                AnnT.append(annTokens[i])
-                YT.append(y_train[i])
+        # remove emotionless class
+        emotionless_indices=[]
+        if ignoreEmotionLess:
+            for i in range(len(y_train)):
+                if(y_train[i]=="emotionless"):
+                    emotionless_indices.append(i)
+            
+            AnnT=[]
+            YT=[]
+            X_train_indices = []    # keeps track of the indices of the considered subtitles which have class other than emotionless
+            for i in range(len(y_train)):
+                if(i not in emotionless_indices):
+                    AnnT.append(annTokens[i])
+                    YT.append(y_train[i])
+                    X_train_indices.append(i)
+            
+            annTokens=AnnT
+            y_train=YT
         
-        annTokens=AnnT
-        y_train=YT
-        """
+        
         # we get the feature space below
         ccounts = defaultdict(lambda: 0)
         for atlst in annTokens:
@@ -136,8 +138,9 @@ class MaxentClassifier:
         X_train = X_train.toarray()
         print(len(self.other_features))
         print(X_train.shape[0])
-        assert len(self.other_features) == X_train.shape[0]
-         
+        assert (len(self.other_features) - len(emotionless_indices)) == X_train.shape[0]
+        assert (len(X_train_indices) == X_train.shape[0])
+        
         extra_features = []
         for ii in range(1, X_train.shape[0] + 1):
             #print ii
@@ -149,20 +152,20 @@ class MaxentClassifier:
             key2 = None
             key3 = None
              
-            if self.other_features[str(ii)]['prev1_emotion'] == 0:
+            if self.other_features[str(X_train_indices[ii])]['prev1_emotion'] == 0:
                 key1 = 'emotionless'
             else:
-                key1 = self.other_features[str(ii)]['prev1_emotion']
+                key1 = self.other_features[str(X_train_indices[ii])]['prev1_emotion']
  
-            if self.other_features[str(ii)]['prev2_emotion'] == 0:
+            if self.other_features[str(X_train_indices[ii])]['prev2_emotion'] == 0:
                 key2 = 'emotionless'
             else:
-                key2 = self.other_features[str(ii)]['prev2_emotion']
+                key2 = self.other_features[str(X_train_indices[ii])]['prev2_emotion']
  
-            if self.other_features[str(ii)]['prev3_emotion'] == 0:
+            if self.other_features[str(X_train_indices[ii])]['prev3_emotion'] == 0:
                 key3 = 'emotionless'
             else:
-                key3 = self.other_features[str(ii)]['prev3_emotion']
+                key3 = self.other_features[str(X_train_indices[ii])]['prev3_emotion']
              
 #             print class_dict[key1]
 #             print class_dict[key2]
@@ -178,14 +181,14 @@ class MaxentClassifier:
             prev_label3[class_dict[key3]] = 1
             
             # add punctuation features
-            punc_features = [self.other_features[str(ii)]['eight_note_mark'], self.other_features[str(ii)]['exclamation_pt'], 
-                             self.other_features[str(ii)]['question_mark']]
+            punc_features = [self.other_features[str(X_train_indices[ii])]['eight_note_mark'], self.other_features[str(X_train_indices[ii])]['exclamation_pt'], 
+                             self.other_features[str(X_train_indices[ii])]['question_mark']]
 
             
             # add pos tag percentages
             POS_features=[]
             for tag in ['NN','VB','JJ','ADV']:
-                POS_features.append(self.other_features[str(ii)][tag+"_percent"])
+                POS_features.append(self.other_features[str(X_train_indices[ii])][tag+"_percent"])
 
 
 
@@ -225,7 +228,7 @@ class MaxentClassifier:
     
     def train(self):
 #         
-        #self.clf = LogisticRegression(max_iter=1000, random_state=42,multi_class='ovr')
+        self.clf = LogisticRegression(max_iter=1000, class_weight='balanced', random_state=42,multi_class='ovr')
 
         #RBF Kernel
         #self.clf = svm.SVC( kernel="rbf",max_iter=1000, random_state=42,decision_function_shape='ovr')
@@ -346,7 +349,8 @@ if __name__ == '__main__':
         
     classifier = MaxentClassifier()
     classifier.readOtherFeatures(other_features_dict['combined'])
-    classifier.createFeatureVectors(annData)
+    #classifier.createFeatureVectors(annData)
+    classifier.createFeatureVectors(annData, ignoreEmotionLess=True)
     classifier.train()
     classifier.crossvalidate()
     #classifier.validate()
