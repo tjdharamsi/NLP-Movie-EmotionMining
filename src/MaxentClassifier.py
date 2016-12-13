@@ -34,7 +34,7 @@ rev_class_dict={0:'emotionless',1:'happy',2: 'sad',3: 'surprise', 4:'fear', 5:'d
 
 class MaxentClassifier:
     
-    def __init__(self):
+    def __init__(self, ignoreEmotionLess=False):
         print('init')
         self.X_train = None
         self.y = None
@@ -43,9 +43,10 @@ class MaxentClassifier:
         self.IdxToWord = None
         self.topFeatures = None
         self.other_features = None
+        self.ignoreEmotionLess = ignoreEmotionLess
 
 
-    def createFeatureVectors(self, annData, ignoreEmotionLess=False):
+    def createFeatureVectors(self, annData):
         print('createFeatureVectors')
         annTokens = []
         y_train = []
@@ -68,7 +69,7 @@ class MaxentClassifier:
         #self.other_features
         # remove emotionless class
         emotionless_indices=[]
-        if ignoreEmotionLess:
+        if self.ignoreEmotionLess:
             for i in range(len(y_train)):
                 if(y_train[i]=="emotionless"):
                     emotionless_indices.append(i)
@@ -80,7 +81,7 @@ class MaxentClassifier:
                 if(i not in emotionless_indices):
                     AnnT.append(annTokens[i])
                     YT.append(y_train[i])
-                    X_train_indices.append(i)
+                    X_train_indices.append(i+1)
             
             annTokens=AnnT
             y_train=YT
@@ -142,7 +143,7 @@ class MaxentClassifier:
         assert (len(X_train_indices) == X_train.shape[0])
         
         extra_features = []
-        for ii in range(1, X_train.shape[0] + 1):
+        for ii in range(X_train.shape[0]):
             #print ii
             #print self.other_features[str(ii)]
             
@@ -151,7 +152,7 @@ class MaxentClassifier:
             key1 = None
             key2 = None
             key3 = None
-             
+            
             if self.other_features[str(X_train_indices[ii])]['prev1_emotion'] == 0:
                 key1 = 'emotionless'
             else:
@@ -220,7 +221,7 @@ class MaxentClassifier:
 
         self.y = [class_dict[cl] for cl in y_train]
         
-        #print set(self.y)
+        print set(self.y)
         
         self.X_train = X_train
         #self.y = np.asarray(self.y)
@@ -228,7 +229,8 @@ class MaxentClassifier:
     
     def train(self):
 #         
-        self.clf = LogisticRegression(max_iter=1000, class_weight='balanced', random_state=42,multi_class='ovr')
+        #self.clf = LogisticRegression(max_iter=1000, class_weight='balanced', random_state=42,multi_class='ovr')
+        self.clf = LogisticRegression(max_iter=1000, random_state=42,multi_class='ovr')
 
         #RBF Kernel
         #self.clf = svm.SVC( kernel="rbf",max_iter=1000, random_state=42,decision_function_shape='ovr')
@@ -238,12 +240,12 @@ class MaxentClassifier:
         #self.clf = svm.LinearSVC( max_iter=1000, random_state=42,multi_class='ovr')
 
         #RandomForest
-        self.clf=RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=4, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
+        #self.clf=RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=4, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
 
     def crossvalidate(self):
         scores = cross_val_score(self.clf, self.X_train, self.y, cv=5)
         predicted = cross_val_predict(self.clf,self.X_train,self.y, cv=5)
-        #print(predicted)
+        print(set(predicted))
         keerti_results=[]
         for i in predicted:
             keerti_results.append(rev_class_dict[i])
@@ -281,7 +283,6 @@ class MaxentClassifier:
         print(classification_report(self.y, predicted, target_names=class_names))
 
     def validate(self):
-
         X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
         print(self.clf.fit(X_train, y_train).score(X_test,y_test))
         ans=self.clf.predict(X_test)
@@ -297,7 +298,6 @@ class MaxentClassifier:
             f.write(i+"\n")
         f.close()
         
-
         #Confusion Matrix
         plt.figure()
         cnf_matrix = confusion_matrix(y_test, ans)
@@ -347,10 +347,10 @@ if __name__ == '__main__':
     with open(sys.argv[1], 'rb') as f:
         annData = cPickle.load(f)
         
-    classifier = MaxentClassifier()
+    classifier = MaxentClassifier(ignoreEmotionLess=True)
     classifier.readOtherFeatures(other_features_dict['combined'])
     #classifier.createFeatureVectors(annData)
-    classifier.createFeatureVectors(annData, ignoreEmotionLess=True)
+    classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
     #classifier.validate()
