@@ -221,7 +221,7 @@ class MaxentClassifier:
 
         self.y = [class_dict[cl] for cl in y_train]
         
-        print set(self.y)
+        #print set(self.y)
         
         self.X_train = X_train
         #self.y = np.asarray(self.y)
@@ -245,7 +245,7 @@ class MaxentClassifier:
     def crossvalidate(self):
         scores = cross_val_score(self.clf, self.X_train, self.y, cv=5)
         predicted = cross_val_predict(self.clf,self.X_train,self.y, cv=5)
-        print(set(predicted))
+        #print(set(predicted))
         keerti_results=[]
         for i in predicted:
             keerti_results.append(rev_class_dict[i])
@@ -263,7 +263,10 @@ class MaxentClassifier:
         plt.figure()
         cnf_matrix = confusion_matrix(self.y, predicted)
         np.set_printoptions(precision=2)
-        class_names=["emotionless","happy","sad","surprise","fear","disgust","anger"]
+        if self.ignoreEmotionLess:
+            class_names=["happy","sad","surprise","fear","disgust","anger"]
+        else:
+            class_names=["emotionless","happy","sad","surprise","fear","disgust","anger"]
         plt.imshow(cnf_matrix, interpolation='nearest', cmap=plt.cm.Blues)
         plt.title('Confusion matrix, without normalization')
         plt.colorbar()
@@ -302,7 +305,10 @@ class MaxentClassifier:
         plt.figure()
         cnf_matrix = confusion_matrix(y_test, ans)
         np.set_printoptions(precision=2)
-        class_names=["emotionless","happy","sad","surprise","fear","disgust","anger"]
+        if self.ignoreEmotionLess:
+            class_names=["happy","sad","surprise","fear","disgust","anger"]
+        else:
+            class_names=["emotionless","happy","sad","surprise","fear","disgust","anger"]
         plt.imshow(cnf_matrix, interpolation='nearest', cmap=plt.cm.Blues)
         plt.title('Confusion matrix, without normalization')
         plt.colorbar()
