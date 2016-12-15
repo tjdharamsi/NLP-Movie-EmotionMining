@@ -200,7 +200,7 @@ class MaxentClassifier:
             #extra_fv = np.concatenate((prev_label2, prev_label3, POS_features,punc_features))
             extra_fv = np.concatenate((punc_features,POS_features,prev_label3,prev_label2,prev_label1))
             
-            #extra_fv=np.concatenate((punc_features, POS_features,prev_label3,prev_label2))
+            #extra_fv=np.concatenate((punc_features, POS_features))
             #extra_fv=punc_features
 
             
@@ -230,6 +230,7 @@ class MaxentClassifier:
     
     def train(self):
 #         
+        
         #self.clf = LogisticRegression(max_iter=1000, class_weight='balanced', random_state=42,multi_class='ovr')
         self.clf = LogisticRegression(max_iter=1000, random_state=42,multi_class='ovr')
 
@@ -238,7 +239,7 @@ class MaxentClassifier:
 
         
         #Linear SVC
-        self.clf = svm.LinearSVC( max_iter=1000, random_state=42,multi_class='ovr')
+        #self.clf = svm.LinearSVC( max_iter=1000, random_state=42,multi_class='ovr')
 
         #RandomForest
         #self.clf=RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=4, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
@@ -261,7 +262,7 @@ class MaxentClassifier:
                 count+=1
         #print(count)
         class_names=["emotionless","happy","sad","surprise","fear","disgust","anger"]
-        """
+        
         plt.figure()
         cnf_matrix = confusion_matrix(self.y, predicted)
         np.set_printoptions(precision=2)
@@ -282,7 +283,7 @@ class MaxentClassifier:
         plt.tight_layout()
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        plt.show()"""
+        plt.show()
         
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
         #print(classification_report(self.y, predicted, target_names=class_names))
@@ -354,15 +355,13 @@ if __name__ == '__main__':
     annData = None
     with open(sys.argv[1], 'rb') as f:
         annData = cPickle.load(f)
-        
-<<<<<<< Updated upstream
+
+    #classifier = MaxentClassifier(ignoreEmotionLess=True)
+    #classifier.readOtherFeatures(other_features_dict['combined'])
+    #classifier.createFeatureVectors(annData)
+
     classifier = MaxentClassifier(ignoreEmotionLess=True)
     classifier.readOtherFeatures(other_features_dict['combined'])
-    #classifier.createFeatureVectors(annData)
-=======
-    classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict['Walking_Dead'])
->>>>>>> Stashed changes
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
