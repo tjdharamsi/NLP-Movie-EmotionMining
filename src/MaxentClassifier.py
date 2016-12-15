@@ -192,34 +192,38 @@ class MaxentClassifier:
             POS_features=[]
             for tag in ['NN','VB','JJ','ADV']:
                 POS_features.append(self.other_features[str(X_train_indices[ii])][tag+"_percent"])
-
-
-
+                
+            # add emolex features
+            emolex_features=[]
             
+            for cprob in ["emotionless_prob", "happy_prob", "sad_prob", "surprise_prob", "fear_prob", "disgust_prob", "anger_prob"]:
+                emolex_features.append(self.other_features[str(X_train_indices[ii])][cprob])
             
+            if self.ignoreEmotionLess:
+                emolex_features = np.asarray(emolex_features[1:])
+                # re-normalize the probabilities
+                emolex_features = (emolex_features / (np.sum(emolex_features) + 1e-6))
             
             #extra_fv = np.concatenate((prev_label1,prev_label2,prev_label3, POS_features, punc_features))
             #extra_fv = np.concatenate((prev_label2, prev_label3, POS_features,punc_features))
-            extra_fv = np.concatenate((punc_features,POS_features,prev_label3,prev_label2,prev_label1))
-            
+            extra_fv = np.concatenate((punc_features,POS_features, emolex_features, prev_label3,prev_label2,prev_label1))
+            #extra_fv = np.concatenate((punc_features,POS_features, emolex_features, prev_label3, prev_label2))
+            #extra_fv = np.concatenate((punc_features,POS_features, emolex_features, prev_label3))
+            #extra_fv = np.concatenate((punc_features,POS_features, emolex_features))
             #extra_fv=np.concatenate((punc_features, POS_features))
             #extra_fv=punc_features
 
-            
-
-            
-            
             extra_features.append(extra_fv)
             
         
         extra_features = np.asarray(extra_features)
         
         
-         
         X_train = np.concatenate((X_train, extra_features), axis=1)
+        # all - (unigrams + bigrams)
         #X_train=extra_features
         print('Feature space dimensionality: ', X_train.shape[1])
-         
+
         #print(X_train.shape)
 
         self.y = [class_dict[cl] for cl in y_train]
@@ -329,12 +333,6 @@ class MaxentClassifier:
         plt.xlabel('Predicted label')
         plt.show()
 
-
-
-
-
-
-
     def getTopFeatures(self):
         X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
         selector = RFE(self.clf, 50, step=1)
@@ -348,7 +346,7 @@ class MaxentClassifier:
             self.other_features = json.load(f)
         #print(self.other_features)
 
-    
+
 
 
 
