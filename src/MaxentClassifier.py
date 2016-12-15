@@ -256,11 +256,7 @@ class MaxentClassifier:
         for i in keerti_results:
             f.write(i+"\n")
         f.close()
-        count=0
-        for i in (predicted):
-            if(i==2):
-                count+=1
-        #print(count)
+        
         class_names=["emotionless","happy","sad","surprise","fear","disgust","anger"]
         
         plt.figure()
