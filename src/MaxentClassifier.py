@@ -202,7 +202,7 @@ class MaxentClassifier:
             #extra_fv = np.concatenate((prev_label2, prev_label3, POS_features,punc_features))
             extra_fv = np.concatenate((punc_features,POS_features,prev_label3,prev_label2,prev_label1))
             
-            #extra_fv=np.concatenate((punc_features, POS_features,prev_label3,prev_label2))
+            #extra_fv=np.concatenate((punc_features, POS_features))
             #extra_fv=punc_features
 
             
@@ -232,6 +232,7 @@ class MaxentClassifier:
     
     def train(self):
 #         
+        
         #self.clf = LogisticRegression(max_iter=1000, class_weight='balanced', random_state=42,multi_class='ovr')
         self.clf = LogisticRegression(max_iter=1000, random_state=42,multi_class='ovr')
 
@@ -240,7 +241,7 @@ class MaxentClassifier:
 
         
         #Linear SVC
-        self.clf = svm.LinearSVC( max_iter=1000, random_state=42,multi_class='ovr')
+        #self.clf = svm.LinearSVC( max_iter=1000, random_state=42,multi_class='ovr')
 
         #RandomForest
         #self.clf=RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=4, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
@@ -356,10 +357,8 @@ if __name__ == '__main__':
     annData = None
     with open(sys.argv[1], 'rb') as f:
         annData = cPickle.load(f)
-        
-    classifier = MaxentClassifier(ignoreEmotionLess=False)
+    classifier = MaxentClassifier(ignoreEmotionLess=True)
     classifier.readOtherFeatures(other_features_dict['combined'])
-    #classifier.createFeatureVectors(annData)
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
