@@ -69,6 +69,7 @@ class MaxentClassifier:
         #self.other_features
         # remove emotionless class
         emotionless_indices=[]
+        X_train_indices = []    # keeps track of the indices of the considered subtitles which have class other than emotionless
         if self.ignoreEmotionLess:
             for i in range(len(y_train)):
                 if(y_train[i]=="emotionless"):
@@ -76,7 +77,6 @@ class MaxentClassifier:
             
             AnnT=[]
             YT=[]
-            X_train_indices = []    # keeps track of the indices of the considered subtitles which have class other than emotionless
             for i in range(len(y_train)):
                 if(i not in emotionless_indices):
                     AnnT.append(annTokens[i])
@@ -86,6 +86,8 @@ class MaxentClassifier:
             annTokens=AnnT
             y_train=YT
         
+        if len(X_train_indices) == 0:
+            X_train_indices = range(1, len(annTokens)+1)
         
         # we get the feature space below
         ccounts = defaultdict(lambda: 0)
@@ -260,8 +262,8 @@ class MaxentClassifier:
             if(i==2):
                 count+=1
         #print(count)
-        class_names=["emotionless","happy","sad","surprise","fear","disgust","anger"]
-        """
+
+        '''        
         plt.figure()
         cnf_matrix = confusion_matrix(self.y, predicted)
         np.set_printoptions(precision=2)
@@ -282,8 +284,8 @@ class MaxentClassifier:
         plt.tight_layout()
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        plt.show()"""
-        
+        plt.show()
+        '''
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
         #print(classification_report(self.y, predicted, target_names=class_names))
 
@@ -355,14 +357,9 @@ if __name__ == '__main__':
     with open(sys.argv[1], 'rb') as f:
         annData = cPickle.load(f)
         
-<<<<<<< Updated upstream
-    classifier = MaxentClassifier(ignoreEmotionLess=True)
+    classifier = MaxentClassifier(ignoreEmotionLess=False)
     classifier.readOtherFeatures(other_features_dict['combined'])
     #classifier.createFeatureVectors(annData)
-=======
-    classifier = MaxentClassifier()
-    classifier.readOtherFeatures(other_features_dict['Walking_Dead'])
->>>>>>> Stashed changes
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()
