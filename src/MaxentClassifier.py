@@ -268,7 +268,7 @@ class MaxentClassifier:
                 count+=1
         #print(count)
 
-        '''        
+               
         plt.figure()
         cnf_matrix = confusion_matrix(self.y, predicted)
         np.set_printoptions(precision=2)
@@ -290,9 +290,9 @@ class MaxentClassifier:
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         plt.show()
-        '''
+        
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-        #print(classification_report(self.y, predicted, target_names=class_names))
+        print(classification_report(self.y, predicted, target_names=class_names))
 
     def validate(self):
         X_train, X_test, y_train, y_test = train_test_split(self.X_train, self.y, test_size=0.2, random_state=42)
@@ -355,8 +355,8 @@ if __name__ == '__main__':
     annData = None
     with open(sys.argv[1], 'rb') as f:
         annData = cPickle.load(f)
-    classifier = MaxentClassifier(ignoreEmotionLess=True)
-    classifier.readOtherFeatures(other_features_dict['combined'])
+    classifier = MaxentClassifier(ignoreEmotionLess=False)
+    classifier.readOtherFeatures(other_features_dict['Friends'])
     classifier.createFeatureVectors(annData)
     classifier.train()
     classifier.crossvalidate()

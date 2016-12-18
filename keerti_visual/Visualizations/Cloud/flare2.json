@@ -1,0 +1,82 @@
+{
+ "name": "flare2",
+ "children": [
+  {
+   "name": "happy",
+   "children": [
+    {"name": "Good", "size": 17010},
+    {"name": "Heart", "size": 5842},
+    {"name": "Thank", "size": 1041},
+    {"name": "Love", "size": 5176},
+    {"name": "Close", "size": 449},
+    {"name": "Like", "size": 5593},
+    {"name": "Great", "size": 9201},
+    {"name": "Kind", "size": 19975},
+    {"name": "Darling", "size": 1116},
+    {"name": "Joy", "size": 6006},
+    {"name": "Welcome", "size": 6010}
+   ]
+  },
+  {
+   "name": "sad",
+   "children": [
+    {"name": "Miss", "size": 17010},
+    {"name": "Sorry", "size": 5842},
+    {"name": "Goodbye", "size": 1041},
+    {"name": "Worry", "size": 5176},
+    {"name": "Hell", "size": 449},
+    {"name": "Shit", "size": 5593},
+    {"name": "Die", "size": 5534},
+    {"name": "Cry", "size": 9201}
+   ]
+  },
+  {
+   "name": "anger",
+   "children": [
+    {"name": "Absurd", "size": 1759},
+    {"name": "Bastard", "size": 2165},
+    {"name": "Stupid", "size": 586},
+    {"name": "Wrong", "size": 3331}
+   ]
+  },
+  {
+   "name": "disgust",
+   "children": [
+    {"name": "Away", "size": 8833},
+    {"name": "Stop", "size": 1732},
+    {"name": "Nothing", "size": 3623},
+    {"name": "Enough", "size": 10066}
+   ]
+  },
+  {
+   "name": "emotionless",
+   "children": [
+    {"name": "lot", "size": 1082},
+    {"name": "not", "size": 1336},
+    {"name": "never", "size": 319},
+    {"name": "so", "size": 10498},
+    {"name": "light", "size": 2822},
+    {"name": "there", "size": 9983}
+   ]
+  },
+  {
+   "name": "fear",
+   "children": [
+    {"name": "Cold", "size": 1082},
+    {"name": "Sink", "size": 1336},
+    {"name": "Swim", "size": 319},
+    {"name": "Tie", "size": 10498},
+    {"name": "Fall", "size": 2822},
+    {"name": "Please", "size": 9983}
+   ]
+  },
+  {
+   "name": "surprise",
+   "children": [
+    {"name": "Diamond", "size": 1616},
+    {"name": "Very", "size": 1027},
+    {"name": "Damn", "size": 3891}
+   ]
+  }
+ ]
+}
