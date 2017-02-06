@@ -1,4 +1,4 @@
-episode = "Titanic"
+episode = "wd"
 
 original_srt_file = episode + ".srt"
 emotion_srt_file = episode + "_Emotion.srt"
@@ -23,7 +23,7 @@ i = 1
 
 
 # Length of each clip
-time = 3
+time = 1
 
 def total_seconds(time):
 	hour, minute, sec = time.split(":")
@@ -79,7 +79,7 @@ for line in fr:
 
 timer = 0
 
-fw = open("emotion_group.csv", "w")
+fw = open("emotion_group_wd.csv", "w")
 for emo in timeline:
 	for k,v in emo.iteritems():
 		fw.write(str(k) + ", " + str(timer) + ", " + str(v) + "\n")

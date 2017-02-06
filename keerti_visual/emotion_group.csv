@@ -1,399 +1,400 @@
-sad, 0, 6
-emotionless, 0, 21
-disgust, 0, 0
-anger, 0, 0
-surprise, 0, 0
-fear, 0, 0
-happy, 0, 1
-sad, 3, 0
-emotionless, 3, 24
-disgust, 3, 0
-anger, 3, 0
-surprise, 3, 1
-fear, 3, 0
-happy, 3, 3
-sad, 6, 0
-emotionless, 6, 16
-disgust, 6, 3
-anger, 6, 5
-surprise, 6, 4
-fear, 6, 0
-happy, 6, 14
-sad, 9, 0
-emotionless, 9, 23
-disgust, 9, 5
-anger, 9, 1
-surprise, 9, 10
-fear, 9, 0
-happy, 9, 8
-sad, 12, 0
-emotionless, 12, 27
-disgust, 12, 2
-anger, 12, 0
-surprise, 12, 5
-fear, 12, 1
-happy, 12, 5
-sad, 15, 0
-emotionless, 15, 25
-disgust, 15, 3
-anger, 15, 0
-surprise, 15, 2
-fear, 15, 0
-happy, 15, 4
-sad, 18, 0
-emotionless, 18, 17
-disgust, 18, 5
-anger, 18, 1
-surprise, 18, 1
-fear, 18, 0
-happy, 18, 8
-sad, 21, 0
-emotionless, 21, 7
-disgust, 21, 0
-anger, 21, 0
-surprise, 21, 7
-fear, 21, 0
-happy, 21, 25
-sad, 24, 0
-emotionless, 24, 30
-disgust, 24, 7
-anger, 24, 0
-surprise, 24, 0
-fear, 24, 0
-happy, 24, 7
-sad, 27, 0
-emotionless, 27, 13
-disgust, 27, 0
-anger, 27, 0
-surprise, 27, 2
-fear, 27, 0
-happy, 27, 11
-sad, 30, 6
-emotionless, 30, 12
-disgust, 30, 13
-anger, 30, 0
-surprise, 30, 3
-fear, 30, 1
-happy, 30, 0
-sad, 33, 8
-emotionless, 33, 11
-disgust, 33, 0
-anger, 33, 12
-surprise, 33, 12
-fear, 33, 6
-happy, 33, 2
-sad, 36, 0
-emotionless, 36, 28
-disgust, 36, 7
-anger, 36, 6
-surprise, 36, 4
-fear, 36, 0
-happy, 36, 4
-sad, 39, 13
-emotionless, 39, 6
-disgust, 39, 1
-anger, 39, 0
-surprise, 39, 11
-fear, 39, 0
-happy, 39, 9
-sad, 42, 10
-emotionless, 42, 15
-disgust, 42, 13
-anger, 42, 3
-surprise, 42, 4
-fear, 42, 0
-happy, 42, 8
-sad, 45, 19
-emotionless, 45, 14
-disgust, 45, 5
-anger, 45, 6
-surprise, 45, 1
-fear, 45, 0
-happy, 45, 10
-sad, 48, 0
-emotionless, 48, 12
-disgust, 48, 6
-anger, 48, 0
-surprise, 48, 14
-fear, 48, 0
-happy, 48, 12
-sad, 51, 1
-emotionless, 51, 33
-disgust, 51, 5
-anger, 51, 1
-surprise, 51, 4
-fear, 51, 0
-happy, 51, 4
-sad, 54, 0
-emotionless, 54, 29
-disgust, 54, 13
-anger, 54, 0
-surprise, 54, 4
-fear, 54, 0
-happy, 54, 10
-sad, 57, 1
-emotionless, 57, 7
-disgust, 57, 4
-anger, 57, 0
-surprise, 57, 2
-fear, 57, 0
-happy, 57, 12
-sad, 60, 0
-emotionless, 60, 11
-disgust, 60, 0
-anger, 60, 2
-surprise, 60, 1
-fear, 60, 0
-happy, 60, 5
-sad, 63, 0
-emotionless, 63, 1
-disgust, 63, 12
-anger, 63, 26
-surprise, 63, 0
-fear, 63, 5
-happy, 63, 0
-sad, 66, 1
-emotionless, 66, 28
-disgust, 66, 10
-anger, 66, 1
-surprise, 66, 0
-fear, 66, 2
-happy, 66, 0
-sad, 69, 20
-emotionless, 69, 16
-disgust, 69, 5
-anger, 69, 3
-surprise, 69, 2
-fear, 69, 0
-happy, 69, 10
-sad, 72, 2
-emotionless, 72, 2
-disgust, 72, 3
-anger, 72, 0
-surprise, 72, 4
-fear, 72, 0
-happy, 72, 13
-sad, 75, 1
-emotionless, 75, 11
-disgust, 75, 6
-anger, 75, 0
-surprise, 75, 5
-fear, 75, 0
-happy, 75, 7
-sad, 78, 2
-emotionless, 78, 7
-disgust, 78, 0
-anger, 78, 1
-surprise, 78, 4
-fear, 78, 0
-happy, 78, 6
-sad, 81, 0
-emotionless, 81, 8
-disgust, 81, 0
-anger, 81, 3
-surprise, 81, 8
-fear, 81, 0
-happy, 81, 10
-sad, 84, 0
-emotionless, 84, 1
-disgust, 84, 0
-anger, 84, 0
-surprise, 84, 0
-fear, 84, 2
-happy, 84, 14
-sad, 87, 0
-emotionless, 87, 5
-disgust, 87, 0
-anger, 87, 2
-surprise, 87, 10
-fear, 87, 1
-happy, 87, 11
-sad, 90, 1
-emotionless, 90, 0
-disgust, 90, 0
-anger, 90, 0
-surprise, 90, 6
-fear, 90, 9
-happy, 90, 0
-sad, 93, 0
-emotionless, 93, 25
-disgust, 93, 7
-anger, 93, 6
-surprise, 93, 7
-fear, 93, 4
-happy, 93, 2
-sad, 96, 13
-emotionless, 96, 13
-disgust, 96, 10
-anger, 96, 8
-surprise, 96, 4
-fear, 96, 3
-happy, 96, 0
-sad, 99, 12
-emotionless, 99, 18
-disgust, 99, 5
-anger, 99, 1
-surprise, 99, 9
-fear, 99, 1
-happy, 99, 0
-sad, 102, 7
-emotionless, 102, 27
-disgust, 102, 0
-anger, 102, 2
-surprise, 102, 11
-fear, 102, 4
-happy, 102, 0
-sad, 105, 0
-emotionless, 105, 13
-disgust, 105, 11
-anger, 105, 9
-surprise, 105, 6
-fear, 105, 7
-happy, 105, 0
-sad, 108, 3
-emotionless, 108, 8
-disgust, 108, 0
-anger, 108, 4
-surprise, 108, 9
-fear, 108, 7
-happy, 108, 4
-sad, 111, 5
-emotionless, 111, 7
-disgust, 111, 1
-anger, 111, 3
-surprise, 111, 9
-fear, 111, 9
-happy, 111, 2
-sad, 114, 0
-emotionless, 114, 3
-disgust, 114, 0
-anger, 114, 4
-surprise, 114, 5
-fear, 114, 16
-happy, 114, 2
-sad, 117, 6
-emotionless, 117, 11
-disgust, 117, 8
-anger, 117, 18
-surprise, 117, 7
-fear, 117, 0
-happy, 117, 0
-sad, 120, 6
-emotionless, 120, 10
-disgust, 120, 1
-anger, 120, 13
-surprise, 120, 6
-fear, 120, 13
-happy, 120, 0
-sad, 123, 15
-emotionless, 123, 20
-disgust, 123, 2
-anger, 123, 11
-surprise, 123, 0
-fear, 123, 7
-happy, 123, 0
-sad, 126, 0
-emotionless, 126, 6
-disgust, 126, 8
-anger, 126, 2
-surprise, 126, 8
-fear, 126, 8
-happy, 126, 7
-sad, 129, 0
-emotionless, 129, 0
-disgust, 129, 0
-anger, 129, 4
-surprise, 129, 0
-fear, 129, 21
-happy, 129, 0
-sad, 132, 9
-emotionless, 132, 1
-disgust, 132, 0
-anger, 132, 4
-surprise, 132, 7
-fear, 132, 20
-happy, 132, 0
-sad, 135, 18
-emotionless, 135, 1
-disgust, 135, 11
-anger, 135, 5
-surprise, 135, 1
-fear, 135, 3
-happy, 135, 0
-sad, 138, 6
-emotionless, 138, 0
-disgust, 138, 0
-anger, 138, 0
-surprise, 138, 0
-fear, 138, 5
-happy, 138, 0
-sad, 141, 2
-emotionless, 141, 0
-disgust, 141, 0
-anger, 141, 0
-surprise, 141, 0
-fear, 141, 12
-happy, 141, 0
-sad, 144, 13
-emotionless, 144, 0
-disgust, 144, 0
-anger, 144, 0
-surprise, 144, 0
-fear, 144, 10
-happy, 144, 0
-sad, 147, 0
-emotionless, 147, 0
-disgust, 147, 0
-anger, 147, 0
-surprise, 147, 0
-fear, 147, 12
-happy, 147, 0
-sad, 150, 6
-emotionless, 150, 0
-disgust, 150, 0
-anger, 150, 0
-surprise, 150, 0
-fear, 150, 16
-happy, 150, 0
-sad, 153, 6
-emotionless, 153, 4
-disgust, 153, 4
-anger, 153, 9
-surprise, 153, 3
-fear, 153, 11
-happy, 153, 1
-sad, 156, 22
-emotionless, 156, 2
-disgust, 156, 0
-anger, 156, 0
-surprise, 156, 0
-fear, 156, 1
-happy, 156, 15
-sad, 159, 14
-emotionless, 159, 0
-disgust, 159, 0
-anger, 159, 0
-surprise, 159, 0
-fear, 159, 0
-happy, 159, 0
-sad, 162, 12
-emotionless, 162, 0
-disgust, 162, 6
-anger, 162, 0
-surprise, 162, 0
-fear, 162, 0
-happy, 162, 0
-sad, 165, 5
-emotionless, 165, 2
-disgust, 165, 9
-anger, 165, 0
-surprise, 165, 0
-fear, 165, 0
-happy, 165, 15
-sad, 168, 0
-emotionless, 168, 0
-disgust, 168, 0
-anger, 168, 0
-surprise, 168, 0
-fear, 168, 0
-happy, 168, 31
+Emotions,date,freq
+anger,0,0
+anger,3,0
+anger,6,5
+anger,9,1
+anger,12,0
+anger,15,0
+anger,18,1
+anger,21,0
+anger,24,0
+anger,27,0
+anger,30,0
+anger,33,12
+anger,36,6
+anger,39,0
+anger,42,3
+anger,45,6
+anger,48,0
+anger,51,1
+anger,54,0
+anger,57,0
+anger,60,2
+anger,63,26
+anger,66,1
+anger,69,3
+anger,72,0
+anger,75,0
+anger,78,1
+anger,81,3
+anger,84,0
+anger,87,2
+anger,90,0
+anger,93,6
+anger,96,8
+anger,99,1
+anger,102,2
+anger,105,9
+anger,108,4
+anger,111,3
+anger,114,4
+anger,117,18
+anger,120,13
+anger,123,11
+anger,126,2
+anger,129,4
+anger,132,4
+anger,135,5
+anger,138,0
+anger,141,0
+anger,144,0
+anger,147,0
+anger,150,0
+anger,153,9
+anger,156,0
+anger,159,0
+anger,162,0
+anger,165,0
+anger,168,0
+disgust,0,0
+disgust,3,0
+disgust,6,3
+disgust,9,5
+disgust,12,2
+disgust,15,3
+disgust,18,5
+disgust,21,0
+disgust,24,7
+disgust,27,0
+disgust,30,13
+disgust,33,0
+disgust,36,7
+disgust,39,1
+disgust,42,13
+disgust,45,5
+disgust,48,6
+disgust,51,5
+disgust,54,13
+disgust,57,4
+disgust,60,0
+disgust,63,12
+disgust,66,10
+disgust,69,5
+disgust,72,3
+disgust,75,6
+disgust,78,0
+disgust,81,0
+disgust,84,0
+disgust,87,0
+disgust,90,0
+disgust,93,7
+disgust,96,10
+disgust,99,5
+disgust,102,0
+disgust,105,11
+disgust,108,0
+disgust,111,1
+disgust,114,0
+disgust,117,8
+disgust,120,1
+disgust,123,2
+disgust,126,8
+disgust,129,0
+disgust,132,0
+disgust,135,11
+disgust,138,0
+disgust,141,0
+disgust,144,0
+disgust,147,0
+disgust,150,0
+disgust,153,4
+disgust,156,0
+disgust,159,0
+disgust,162,6
+disgust,165,9
+disgust,168,0
+emotionless,0,21
+emotionless,3,24
+emotionless,6,16
+emotionless,9,23
+emotionless,12,27
+emotionless,15,25
+emotionless,18,17
+emotionless,21,7
+emotionless,24,30
+emotionless,27,13
+emotionless,30,12
+emotionless,33,11
+emotionless,36,28
+emotionless,39,6
+emotionless,42,15
+emotionless,45,14
+emotionless,48,12
+emotionless,51,33
+emotionless,54,29
+emotionless,57,7
+emotionless,60,11
+emotionless,63,1
+emotionless,66,28
+emotionless,69,16
+emotionless,72,2
+emotionless,75,11
+emotionless,78,7
+emotionless,81,8
+emotionless,84,1
+emotionless,87,5
+emotionless,90,0
+emotionless,93,25
+emotionless,96,13
+emotionless,99,18
+emotionless,102,27
+emotionless,105,13
+emotionless,108,8
+emotionless,111,7
+emotionless,114,3
+emotionless,117,11
+emotionless,120,10
+emotionless,123,20
+emotionless,126,6
+emotionless,129,0
+emotionless,132,1
+emotionless,135,1
+emotionless,138,0
+emotionless,141,0
+emotionless,144,0
+emotionless,147,0
+emotionless,150,0
+emotionless,153,4
+emotionless,156,2
+emotionless,159,0
+emotionless,162,0
+emotionless,165,2
+emotionless,168,0
+fear,0,0
+fear,3,0
+fear,6,0
+fear,9,0
+fear,12,1
+fear,15,0
+fear,18,0
+fear,21,0
+fear,24,0
+fear,27,0
+fear,30,1
+fear,33,6
+fear,36,0
+fear,39,0
+fear,42,0
+fear,45,0
+fear,48,0
+fear,51,0
+fear,54,0
+fear,57,0
+fear,60,0
+fear,63,5
+fear,66,2
+fear,69,0
+fear,72,0
+fear,75,0
+fear,78,0
+fear,81,0
+fear,84,2
+fear,87,1
+fear,90,9
+fear,93,4
+fear,96,3
+fear,99,1
+fear,102,4
+fear,105,7
+fear,108,7
+fear,111,9
+fear,114,16
+fear,117,0
+fear,120,13
+fear,123,7
+fear,126,8
+fear,129,21
+fear,132,20
+fear,135,3
+fear,138,5
+fear,141,12
+fear,144,10
+fear,147,12
+fear,150,16
+fear,153,11
+fear,156,1
+fear,159,0
+fear,162,0
+fear,165,0
+fear,168,0
+happy,0,1
+happy,3,3
+happy,6,14
+happy,9,8
+happy,12,5
+happy,15,4
+happy,18,8
+happy,21,25
+happy,24,7
+happy,27,11
+happy,30,0
+happy,33,2
+happy,36,4
+happy,39,9
+happy,42,8
+happy,45,10
+happy,48,12
+happy,51,4
+happy,54,10
+happy,57,12
+happy,60,5
+happy,63,0
+happy,66,0
+happy,69,10
+happy,72,13
+happy,75,7
+happy,78,6
+happy,81,10
+happy,84,14
+happy,87,11
+happy,90,0
+happy,93,2
+happy,96,0
+happy,99,0
+happy,102,0
+happy,105,0
+happy,108,4
+happy,111,2
+happy,114,2
+happy,117,0
+happy,120,0
+happy,123,0
+happy,126,7
+happy,129,0
+happy,132,0
+happy,135,0
+happy,138,0
+happy,141,0
+happy,144,0
+happy,147,0
+happy,150,0
+happy,153,1
+happy,156,15
+happy,159,0
+happy,162,0
+happy,165,15
+happy,168,31
+sad,0,6
+sad,3,0
+sad,6,0
+sad,9,0
+sad,12,0
+sad,15,0
+sad,18,0
+sad,21,0
+sad,24,0
+sad,27,0
+sad,30,6
+sad,33,8
+sad,36,0
+sad,39,13
+sad,42,10
+sad,45,19
+sad,48,0
+sad,51,1
+sad,54,0
+sad,57,1
+sad,60,0
+sad,63,0
+sad,66,1
+sad,69,20
+sad,72,2
+sad,75,1
+sad,78,2
+sad,81,0
+sad,84,0
+sad,87,0
+sad,90,1
+sad,93,0
+sad,96,13
+sad,99,12
+sad,102,7
+sad,105,0
+sad,108,3
+sad,111,5
+sad,114,0
+sad,117,6
+sad,120,6
+sad,123,15
+sad,126,0
+sad,129,0
+sad,132,9
+sad,135,18
+sad,138,6
+sad,141,2
+sad,144,13
+sad,147,0
+sad,150,6
+sad,153,6
+sad,156,22
+sad,159,14
+sad,162,12
+sad,165,5
+sad,168,0
+surprise,0,0
+surprise,3,1
+surprise,6,4
+surprise,9,10
+surprise,12,5
+surprise,15,2
+surprise,18,1
+surprise,21,7
+surprise,24,0
+surprise,27,2
+surprise,30,3
+surprise,33,12
+surprise,36,4
+surprise,39,11
+surprise,42,4
+surprise,45,1
+surprise,48,14
+surprise,51,4
+surprise,54,4
+surprise,57,2
+surprise,60,1
+surprise,63,0
+surprise,66,0
+surprise,69,2
+surprise,72,4
+surprise,75,5
+surprise,78,4
+surprise,81,8
+surprise,84,0
+surprise,87,10
+surprise,90,6
+surprise,93,7
+surprise,96,4
+surprise,99,9
+surprise,102,11
+surprise,105,6
+surprise,108,9
+surprise,111,9
+surprise,114,5
+surprise,117,7
+surprise,120,6
+surprise,123,0
+surprise,126,8
+surprise,129,0
+surprise,132,7
+surprise,135,1
+surprise,138,0
+surprise,141,0
+surprise,144,0
+surprise,147,0
+surprise,150,0
+surprise,153,3
+surprise,156,0
+surprise,159,0
+surprise,162,0
+surprise,165,0
+surprise,168,0
